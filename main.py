@@ -13,8 +13,8 @@ json = import_simplejson()
 
 class listener(StreamListener):
     def __init__(self, api, followed_user_id, followed_user_handle):
+        super().__init__(api)
         self.tweet_data = []
-        self.api = api
         self.followed_user_id = followed_user_id
         self.followed_user_handle = followed_user_handle
 
@@ -43,6 +43,10 @@ class listener(StreamListener):
 
 
 if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print('Need twitter userid and handle (without @).')
+        sys.exit()
+
     auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
     auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
     api = API(auth)
