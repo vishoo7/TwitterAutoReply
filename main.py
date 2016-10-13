@@ -1,34 +1,37 @@
 
-import time
-import os
+from time import ctime
 from tweepy import API
 from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 from credentials import *
+from tweepy.utils import import_simplejson
+json = import_simplejson()
 
 
 class listener(StreamListener):
-    def __init__(self, api, start_time, time_limit=60):
-        self.time = start_time
-        self.limit = time_limit
+    def __init__(self, api, followed_user):
         self.tweet_data = []
         self.api = api
+        self.followed_user = followed_user
+
     def on_error(self, error):
         print("Returned error code %s" % error)
         return False
 
     def on_status(self, status):
-        print(status.text)
+        if status.user.id == self.followed_user:
+            print("Tweeting at %s" % ctime())
+
 
 
 
 if __name__ == "__main__":
-    start_time = time.time()  # grabs the system time
     auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
     auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
     api = API(auth)
 
-    twitterStream = Stream(auth, listener(api, start_time, time_limit=20))  # initialize Stream object with a time out limit
-    twitterStream.filter(follow=['25073877'],async=True)
+    followed_user = 25073877
+    twitterStream = Stream(auth, listener(api, followed_user))
+    twitterStream.filter(follow=[str(followed_user)], async=True)
 
