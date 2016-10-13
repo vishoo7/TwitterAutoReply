@@ -14,6 +14,9 @@ class listener(StreamListener):
         self.limit = time_limit
         self.tweet_data = []
         self.api = api
+    def on_error(self, error):
+        print("Returned error code %s" % error)
+        return False
 
     def on_status(self, status):
         print(status.text)
