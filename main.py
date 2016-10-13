@@ -11,7 +11,7 @@ import random
 json = import_simplejson()
 
 
-class listener(StreamListener):
+class Listener(StreamListener):
     def __init__(self, api, followed_user_id, followed_user_handle):
         super().__init__(api)
         self.tweet_data = []
@@ -43,17 +43,24 @@ class listener(StreamListener):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print('Need twitter userid and handle (without @).')
+    if len(sys.argv) != 2:
+        print('Need twitter handle (without @).')
         sys.exit()
+
+    followed_user_handle = sys.argv[1]
 
     auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
     auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
     api = API(auth)
 
-    followed_user_id = sys.argv[1]
-    followed_user_handle = sys.argv[2]
+    found_users = api.lookup_users(screen_names=[str(followed_user_handle)])
 
-    twitterStream = Stream(auth, listener(api, followed_user_id, followed_user_handle))
+    if len(found_users) != 1:
+        print('Lookup for twitter handle %s failed' % (followed_user_handle))
+        sys.exit()
+
+    followed_user_id = found_users[0].id
+
+    twitterStream = Stream(auth, Listener(api, followed_user_id, followed_user_handle))
     twitterStream.filter(follow=[str(followed_user_id)], async=True)
 

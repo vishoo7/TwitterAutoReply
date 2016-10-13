@@ -1,7 +1,7 @@
 # TwitterAutoReply
 
 ## Configuration
-Install tweepy by running `pip install tweepy`
+Install tweepy by running `$ pip install tweepy`
 
 More about [tweepy](http://www.tweepy.org/)
 
@@ -23,9 +23,9 @@ Fill in the appropriate values from the Keys and Access Tokens page inside the q
 Here you maintain the list of replies separated by new lines. This will reload before ever reply so you can dynamically change the contents.
 
 ### main.py
-Call using twitter id and twitter handle (without @)
+Call using twitter handle (without @)
 
-Example: `python3 main.py 25073877 realDonaldTrump`
+Example: `$ python3 main.py realDonaldTrump`
 
 ## Considerations
 - If the user you are auto-replying to tweets in rapid succession, the loading of *reply_list.txt* may slow down performance. 
