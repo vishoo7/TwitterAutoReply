@@ -1,6 +1,8 @@
 # TwitterAutoReply
 
+## Configuration
 Install tweepy by running `pip install tweepy`
+
 More about [tweepy](http://www.tweepy.org/)
 
 ## Authenticate
@@ -16,3 +18,14 @@ ACCESS_TOKEN_SECRET = ""
 ```
 
 Fill in the appropriate values from the Keys and Access Tokens page inside the quotation marks
+
+## Reply List
+Included is a text file *reply_list.txt*. Here you maintain the list of replies separated by new lines. This will reload before ever reply so you can dynamically change the contents.
+
+## Running
+Pass in two arguments into main.py.
+For example: `python3 main.py 25073877 realDonaldTrump`
+
+## Considerations
+- If the user you are auto-replying to tweets in rapid succession, the loading of *reply_list.txt* may slow down performance. 
+- I do not assume responsibility for how you decide to use this app
