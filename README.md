@@ -36,4 +36,5 @@ Example: `$ python3 main.py realDonaldTrump 1`
 
 ## Considerations
 - If the user you are auto-replying to tweets in rapid succession, the loading of *reply_list.txt* may slow down performance. 
+- When using filter with follow=['{userid}'] it calls *on_status* for retweets of that user's tweets and for replies to that user's tweets. [See here](https://dev.twitter.com/streaming/overview/request-parameters#follow). This is inefficient. Perhaps an alternative to *tweepy.streaming* would be better, but I am not familiar enough with the Twitter API. Currently *on_status* is being called when the streaming API returns JSON containing a key *in_reply_to_status_id*
 - I do not assume responsibility for how you decide to use this app
