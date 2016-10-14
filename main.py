@@ -34,7 +34,7 @@ class Listener(StreamListener):
             tweet_text = '@%s %s' % (self.followed_user_handle, self.next_reply)
             self.api.update_status(tweet_text)
 
-            print(''%s: Tweeted:'' % (ctime(), tweet_text))
+            print('%s: Tweeted:' % (ctime(), tweet_text))
 
             if self.mock_mode:
                 self.update_mock_text(status.text)
