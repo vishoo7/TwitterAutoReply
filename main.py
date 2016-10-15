@@ -81,14 +81,12 @@ if __name__ == '__main__':
     api = API(auth)
 
     found_users = api.lookup_users(screen_names=[str(args.followed_handle)])
-    print found_users
 
     if len(found_users) != 1:
         print('Lookup for twitter handle %s failed' % args.followed_handle)
         sys.exit()
 
     followed_user_id = found_users[0].id
-    print followed_user_id
 
     twitterStream = Stream(auth, Listener(api, followed_user_id, args.followed_handle, args.mock_mode))
     twitterStream.filter(follow=[str(followed_user_id)], async=True)
