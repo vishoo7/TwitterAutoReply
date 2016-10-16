@@ -32,7 +32,7 @@ class Listener(StreamListener):
     def on_status(self, status):
         if status.user.id == self.followed_user_id:
             tweet_text = '@%s %s' % (self.followed_user_handle, self.next_reply)
-            self.api.update_status(tweet_text)
+            self.api.update_status(tweet_text, in_reply_to_status_id=status.id)
 
             print('%s: Tweeted:' % (ctime(), tweet_text))
 
@@ -64,16 +64,16 @@ class Listener(StreamListener):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--handle',
-        required=True,
-        type=str,
-        dest='followed_handle',
-        action='store',
-        help='Twitter handle (without @)')
+                        required=True,
+                        type=str,
+                        dest='followed_handle',
+                        action='store',
+                        help='Twitter handle (without @)')
     parser.add_argument('--mock',
-        dest='mock_mode',
-        default=False,
-        action='store_true',
-        help='enable mock mode')
+                        dest='mock_mode',
+                        default=False,
+                        action='store_true',
+                        help='enable mock mode')
     args = parser.parse_args()
 
     auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
