@@ -1,3 +1,5 @@
+#!/usr/bin/env python3.5
+
 import sys
 from time import ctime
 from tweepy import API
@@ -34,7 +36,7 @@ class Listener(StreamListener):
             tweet_text = '@%s %s' % (self.followed_user_handle, self.next_reply)
             self.api.update_status(tweet_text, in_reply_to_status_id=status.id)
 
-            print('%s: Tweeted:' % (ctime(), tweet_text))
+            print('%s: Tweeted: %s' % (ctime(), tweet_text))
 
             if self.mock_mode:
                 self.update_mock_text(status.text)
