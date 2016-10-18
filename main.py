@@ -54,7 +54,7 @@ class Listener(StreamListener):
             with open('user_tweet_history.txt') as user_tweet_history_file:
                 text = user_tweet_history_file.read()
 
-            text_model = markovify.Text(text)
+            text_model = markovify.NewlineText(text)
             self.next_reply = text_model.make_short_sentence(140)
 
     @staticmethod
