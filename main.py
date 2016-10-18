@@ -59,9 +59,9 @@ class Listener(StreamListener):
 
     @staticmethod
     def update_mock_text(text):
-        with open('user_tweet_history.txt', 'wa') as user_tweet_history_fd:
+        with open('user_tweet_history.txt', 'a') as user_tweet_history_fd:
+            user_tweet_history_fd.write("\n")
             user_tweet_history_fd.write(text)
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
