@@ -34,7 +34,7 @@ class Listener(StreamListener):
     def on_status(self, status):
         if status.user.id == self.followed_user_id:
             tweet_text = '@%s %s' % (self.followed_user_handle, self.next_reply)
-            self.api.update_status(tweet_text, in_reply_to_status_id=status.id)
+            self.api.update_status(tweet_text.upper(), in_reply_to_status_id=status.id)
 
             print('%s: Tweeted: %s' % (ctime(), tweet_text))
 
@@ -55,7 +55,7 @@ class Listener(StreamListener):
                 text = user_tweet_history_file.read()
 
             text_model = markovify.NewlineText(text)
-            self.next_reply = text_model.make_short_sentence(140).upper()
+            self.next_reply = text_model.make_short_sentence(140)
 
     @staticmethod
     def update_mock_text(text):
