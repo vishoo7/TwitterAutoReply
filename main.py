@@ -55,13 +55,13 @@ class Listener(StreamListener):
                 text = user_tweet_history_file.read()
 
             text_model = markovify.NewlineText(text)
-            self.next_reply = text_model.make_short_sentence(140)
+            self.next_reply = text_model.make_short_sentence(140).upper()
 
     @staticmethod
     def update_mock_text(text):
         with open('user_tweet_history.txt', 'a') as user_tweet_history_fd:
             user_tweet_history_fd.write("\n")
-            user_tweet_history_fd.write(text)
+            user_tweet_history_fd.write(str(text.encode('ascii', 'ignore'), 'utf-8'))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
