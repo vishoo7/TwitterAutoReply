@@ -11,6 +11,14 @@ from tweepy.utils import import_simplejson
 import markovify
 import random
 import argparse
+import logging
+
+log = logging.getLogger(__name__)
+stdout_handler = logging.StreamHandler(sys.stdout)
+stdout_handler.setFormatter(logging.Formatter('%(asctime)s: %(name)s - %(levelname)s - %(message)s'))
+stdout_handler.setLevel(logging.INFO)
+log.addHandler(stdout_handler)
+log.setLevel(logging.INFO)
 
 json = import_simplejson()
 
@@ -28,7 +36,7 @@ class Listener(StreamListener):
         self.load_next_reply(mock_mode)
 
     def on_error(self, error):
-        print("Returned error code %s" % error)
+        log.error("Returned error code %s" % error)
         return False
 
     def on_status(self, status):
@@ -36,7 +44,8 @@ class Listener(StreamListener):
             tweet_text = '@%s %s' % (self.followed_user_handle, self.next_reply)
             self.api.update_status(tweet_text, in_reply_to_status_id=status.id)
 
-            print('%s: Tweeted: %s' % (ctime(), tweet_text))
+            log.info('%s tweeted: %s' % (self.followed_user_handle, status.text))
+            log.info('Tweeted: %s' % tweet_text)
 
             if self.mock_mode:
                 self.update_mock_text(status.text)
@@ -57,7 +66,7 @@ class Listener(StreamListener):
             text_model = markovify.NewlineText(text)
             self.next_reply = text_model.make_short_sentence(140, tries=30).upper()
 
-        print('next reply: %s' % (self.next_reply))
+        log.info('next reply: %s' % self.next_reply)
 
     @staticmethod
     def update_mock_text(text):
@@ -66,6 +75,7 @@ class Listener(StreamListener):
             user_tweet_history_fd.write(str(text.encode('ascii', 'ignore'), 'utf-8'))
 
 if __name__ == '__main__':
+    log.info('started')
     parser = argparse.ArgumentParser()
     parser.add_argument('--handle',
                         required=True,
@@ -79,6 +89,7 @@ if __name__ == '__main__':
                         action='store_true',
                         help='enable mock mode')
     args = parser.parse_args()
+    log.debug('args: %s' % args)
 
     auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
     auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
@@ -87,10 +98,11 @@ if __name__ == '__main__':
     found_users = api.lookup_users(screen_names=[str(args.followed_handle)])
 
     if len(found_users) != 1:
-        print('Lookup for twitter handle %s failed' % args.followed_handle)
+        log.error('Lookup for twitter handle %s failed' % args.followed_handle)
         sys.exit()
 
     followed_user_id = found_users[0].id
+    log.debug('followed_user_id: %s' % followed_user_id)
 
     twitterStream = Stream(auth, Listener(api, followed_user_id, args.followed_handle, args.mock_mode))
     twitterStream.filter(follow=[str(followed_user_id)], async=True)
