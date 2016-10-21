@@ -75,7 +75,6 @@ class Listener(StreamListener):
             user_tweet_history_fd.write(str(text.encode('ascii', 'ignore'), 'utf-8'))
 
 if __name__ == '__main__':
-    log.info('started')
     parser = argparse.ArgumentParser()
     parser.add_argument('--handle',
                         required=True,
@@ -89,6 +88,7 @@ if __name__ == '__main__':
                         action='store_true',
                         help='enable mock mode')
     args = parser.parse_args()
+    log.info('started')
     log.debug('args: %s' % args)
 
     auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
