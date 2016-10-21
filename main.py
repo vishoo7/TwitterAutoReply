@@ -81,6 +81,7 @@ if __name__ == '__main__':
                         type=str,
                         dest='followed_handle',
                         action='store',
+                        metavar='HANDLE',
                         help='Twitter handle (without @)')
     parser.add_argument('--mock',
                         dest='mock_mode',
