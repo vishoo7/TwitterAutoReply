@@ -30,9 +30,14 @@ Here you maintain the list of replies separated by new lines. This will reload b
 Here you would have the tweet history of the user, used if you are in mock mode.
 
 ### main.py
-Call using twitter handle (without @) and optional 0 or 1 for mock mode. 1 is on, 0 is off. If last argument isn't specified mock mode is by default off
+```
+usage: main.py [-h] --handle HANDLE [--mock]
 
-Example: `$ python3 main.py realDonaldTrump 1`
+optional arguments:
+  -h, --help       show this help message and exit
+  --handle HANDLE  Twitter handle (without @)
+  --mock           enable mock mode
+```
 
 ## Considerations
 - If the user you are auto-replying to tweets in rapid succession, the loading of *reply_list.txt* may slow down performance. 
