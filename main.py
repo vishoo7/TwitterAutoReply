@@ -7,6 +7,7 @@ from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 from credentials import *
+from utils import gen_hashtags
 from tweepy.utils import import_simplejson
 import markovify
 import random
@@ -24,7 +25,7 @@ json = import_simplejson()
 
 
 class Listener(StreamListener):
-    def __init__(self, api, followed_user_id, followed_user_handle, mock_mode):
+    def __init__(self, api, followed_user_id, followed_user_handle, mock_mode, hashtags):
         super().__init__(api)
         self.tweet_data = []
         self.followed_user_id = followed_user_id
@@ -33,7 +34,7 @@ class Listener(StreamListener):
         self.mock_mode = mock_mode
         self.reply_list = []
         self.next_reply = ''
-        self.load_next_reply(mock_mode)
+        self.load_next_reply(mock_mode, hashtags)
 
     def on_error(self, error):
         log.error("Returned error code %s" % error)
@@ -52,19 +53,30 @@ class Listener(StreamListener):
 
             self.load_next_reply(self.mock_mode)
 
-    def load_next_reply(self, mock=False):
+    def load_next_reply(self, mock=False, hashtags=None):
+        if hashtags:
+            hashtag_string = gen_hashtags(hashtags)
+
         if not mock:
             with open('reply_list.txt', 'r') as reply_list_file:
                 self.reply_list = reply_list_file.readlines()
 
-            self.next_reply = random.choice(self.reply_list)
+            reply = random.choice(self.reply_list)
+            if hashtags:
+                reply += ' ' + hashtag_string
+            self.next_reply = reply
 
         else:
             with open('user_tweet_history.txt') as user_tweet_history_file:
                 text = user_tweet_history_file.read()
 
             text_model = markovify.NewlineText(text)
-            self.next_reply = text_model.make_short_sentence(140, tries=30).upper()
+            if hashtags:
+                reply = text_model.make_short_sentence(140 - (len(hashtag_string) + 1), tries=30).upper()
+                reply += ' ' + hashtag_string
+            else:
+                reply = text_model.make_short_sentence(140, tries=30).upper()
+            self.next_reply = reply
 
         log.info('next reply: %s' % self.next_reply)
 
@@ -88,6 +100,11 @@ if __name__ == '__main__':
                         default=False,
                         action='store_true',
                         help='enable mock mode')
+    parser.add_argument('--hashtags',
+                        dest='hashtags',
+                        default=[],
+                        action='append',
+                        help='hashtags to append to all replies (may be specified more than once)')
     args = parser.parse_args()
     log.info('started')
     log.debug('args: %s' % args)
@@ -105,5 +122,5 @@ if __name__ == '__main__':
     followed_user_id = found_users[0].id
     log.debug('followed_user_id: %s' % followed_user_id)
 
-    twitterStream = Stream(auth, Listener(api, followed_user_id, args.followed_handle, args.mock_mode))
+    twitterStream = Stream(auth, Listener(api, followed_user_id, args.followed_handle, args.mock_mode, args.hashtags))
     twitterStream.filter(follow=[str(followed_user_id)], async=True)
