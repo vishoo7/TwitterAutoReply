@@ -8,7 +8,6 @@ from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 from credentials import *
 from utils import gen_hashtags
-from tweepy.utils import import_simplejson
 import markovify
 import random
 import argparse
@@ -20,9 +19,6 @@ stdout_handler.setFormatter(logging.Formatter('%(asctime)s: %(name)s - %(levelna
 stdout_handler.setLevel(logging.INFO)
 log.addHandler(stdout_handler)
 log.setLevel(logging.INFO)
-
-json = import_simplejson()
-
 
 class Listener(StreamListener):
     def __init__(self, api, followed_user_id, followed_user_handle, mock_mode, hashtags):
