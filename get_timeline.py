@@ -54,6 +54,9 @@ def get_all_tweets(screen_name, output_file, filtered_entity_types, filtered_wor
         # unescape ampersand
         text = html.unescape(text)
 
+        # remove non-ascii
+        text = ''.join(c for c in text if ord(c) < 128)
+
         result.append(text)
 
     with open(output_file, 'w') as output_fd:
