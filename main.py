@@ -47,7 +47,7 @@ class Listener(StreamListener):
             if self.mock_mode:
                 self.update_mock_text(status.text)
 
-            self.load_next_reply(self.mock_mode)
+            self.load_next_reply(self.mock_mode, hashtags)
 
     def load_next_reply(self, mock=False, hashtags=None):
         if hashtags:
