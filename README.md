@@ -1,4 +1,5 @@
-# TwitterAutoReply
+# TwitterAutoReply 
+[![Build Status](https://travis-ci.org/vishoo7/TwitterAutoReply.svg?branch=master)](https://travis-ci.org/vishoo7/TwitterAutoReply)
 
 ## Configuration
 Install tweepy by running `$ pip install tweepy`
