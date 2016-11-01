@@ -1,7 +1,6 @@
 #!/usr/bin/env python3.5
 
 import sys
-from time import ctime
 from tweepy import API
 from tweepy import Stream
 from tweepy import OAuthHandler
