@@ -49,8 +49,7 @@ class Listener(StreamListener):
             self.load_next_reply(self.mock_mode, hashtags)
 
     def load_next_reply(self, mock=False, hashtags=None):
-        if hashtags:
-            hashtag_string = gen_hashtags(hashtags)
+        hashtag_string = gen_hashtags(hashtags)
 
         if not mock:
             with open('reply_list.txt', 'r') as reply_list_file:
