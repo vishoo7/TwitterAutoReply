@@ -27,6 +27,7 @@ class Listener(StreamListener):
         self.followed_user_handle = followed_user_handle
 
         self.mock_mode = mock_mode
+        self.hashtags = hashtags
         self.reply_list = []
         self.next_reply = ''
         self.load_next_reply(mock_mode, hashtags)
@@ -46,7 +47,7 @@ class Listener(StreamListener):
             if self.mock_mode:
                 self.update_mock_text(status.text)
 
-            self.load_next_reply(self.mock_mode, hashtags)
+            self.load_next_reply(self.mock_mode, self.hashtags)
 
     def load_next_reply(self, mock=False, hashtags=None):
         hashtag_string = gen_hashtags(hashtags)
