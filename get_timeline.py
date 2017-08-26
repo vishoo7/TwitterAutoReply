@@ -64,8 +64,6 @@ def get_all_tweets(screen_name, output_file, filtered_entity_types, filtered_wor
             if tweet.strip():
                 output_fd.write("%s\n" % tweet.strip())
 
-    pass
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
